@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CVE Feed</title>
+    <link rel="manifest" href="/static/manifest.json">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <img src="/static/nist-logo.png" alt="NIST Logo" class="logo">
+    </header>
+    <h1>Latest CVEs</h1>
+    <button onclick="loadCVEs()">Load Latest CVEs</button>
+    <div id="cve-container"></div>
+
+    <script>
+        function loadCVEs() {
+            fetch('/fetch-cves')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('cve-container').innerHTML = html;
+                });
+        }
+    </script>
+</body>
+</html>
