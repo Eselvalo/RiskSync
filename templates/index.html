@@ -11,17 +11,30 @@
         <img src="/static/nist-logo.png" alt="NIST Logo" class="logo">
     </header>
     <h1>Latest CVEs</h1>
-    <button onclick="loadCVEs()">Load Latest CVEs</button>
     <div id="cve-container"></div>
+    <button id="load-more" onclick="loadMoreCVEs()">Load More</button>
 
     <script>
-        function loadCVEs() {
-            fetch('/fetch-cves')
-                .then(response => response.text())
+        let startIndex = 0;
+
+        function loadMoreCVEs() {
+            fetch(`/fetch-cves?start=${startIndex}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
                 .then(html => {
-                    document.getElementById('cve-container').innerHTML = html;
-                });
+                    console.log('Loaded more CVEs:', html); // Debugging line
+                    document.getElementById('cve-container').innerHTML += html;
+                    startIndex += 20;
+                })
+                .catch(error => console.error('Error loading more CVEs:', error));
         }
+
+        // Initial load
+        loadMoreCVEs();
     </script>
 </body>
 </html>
